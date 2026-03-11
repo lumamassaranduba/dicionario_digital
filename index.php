@@ -1,220 +1,230 @@
+<?php
+// MÁGICA AQUI: Iniciamos a sessão logo na linha 1 para o index.php saber quem está navegando!
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dicionário Técnico SENAI</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
-        /* PALETA CLARA COM AZUL PRINCIPAL E SOMBRAS */
         :root {
-            --bg-body: #f4f7f9;      /* Fundo geral bem claro e levemente azulado */
-            --bg-surface: #ffffff;   /* Fundo branco puro para destacar as sombras */
-            --text-main: #1e293b;    /* Texto escuro padrão */
-            --text-muted: #64748b;   /* Texto secundário */
-            --azul-principal: #0056b3; /* Azul corporativo e forte */
-            --azul-claro: #e6f0fa;   /* Azul bem suave para fundos de botões */
-            --sombra-leve: 0 4px 6px -1px rgba(0, 86, 179, 0.08), 0 2px 4px -1px rgba(0, 86, 179, 0.04);
-            --sombra-forte: 0 20px 25px -5px rgba(0, 86, 179, 0.15), 0 10px 10px -5px rgba(0, 86, 179, 0.08);
+            --azul-principal: #0d6efd;
+            --sombra-leve: 0 4px 6px -1px rgba(13, 110, 253, 0.08), 0 2px 4px -1px rgba(13, 110, 253, 0.04);
+            --sombra-forte: 0 20px 25px -5px rgba(13, 110, 253, 0.15), 0 10px 10px -5px rgba(13, 110, 253, 0.08);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { display: flex; height: 100vh; background-color: var(--bg-body); color: var(--text-main); overflow: hidden; }
-        
-        /* MENU LATERAL COM SOMBRA */
-        .sidebar { 
-            width: 280px; 
-            background-color: var(--bg-surface); 
-            box-shadow: var(--sombra-leve); /* Sombra separando o menu do corpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+
+        .sidebar {
+            width: 280px;
+            box-shadow: var(--sombra-leve);
             z-index: 10;
-            display: flex; 
-            flex-direction: column; 
-            padding: 32px 24px; 
+            min-height: 100vh;
         }
-        .logo { 
-            font-size: 1.4rem; 
-            font-weight: 800; 
-            color: var(--azul-principal);
-            margin-bottom: 40px; 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .menu { list-style: none; flex-grow: 1; }
-        .menu-titulo { 
-            font-size: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            color: var(--text-muted); 
-            font-weight: 700; 
-            margin-bottom: 12px;
-            margin-top: 24px;
-        }
-        .menu a { 
-            color: var(--text-muted); 
-            text-decoration: none; 
-            display: flex; 
-            align-items: center; 
-            padding: 12px 16px; 
-            border-radius: 10px; 
+
+        .nav-link {
+            color: #6c757d;
             font-weight: 500;
-            transition: all 0.3s ease; 
-            cursor: pointer; 
-            margin-bottom: 8px;
-        }
-        .menu a:hover { background-color: var(--azul-claro); color: var(--azul-principal); transform: translateX(5px); }
-        .menu a.ativo { 
-            background-color: var(--azul-principal); 
-            color: #ffffff; 
-            box-shadow: var(--sombra-leve);
-        }
-        
-        /* BOTÃO DE LOGIN AZUL COM SOMBRA */
-        .btn-login { 
-            margin-top: auto; 
-            background-color: var(--azul-principal); 
-            color: #ffffff !important; 
-            text-align: center; 
-            justify-content: center; 
-            font-weight: 600; 
-            padding: 14px;
-            border-radius: 12px;
-            box-shadow: var(--sombra-leve);
+            border-radius: 0.5rem;
             transition: all 0.3s ease;
         }
-        .btn-login:hover { background-color: #004494; box-shadow: var(--sombra-forte); transform: translateY(-3px); }
 
-        /* ÁREA PRINCIPAL */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        
-        /* BARRA DE PESQUISA FLUTUANTE */
-        .top-bar { 
-            padding: 24px 40px; 
-            display: flex; 
-            align-items: center; 
-            background-color: transparent;
+        .nav-link:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+            color: var(--azul-principal);
+            transform: translateX(5px);
         }
+
+        .nav-link.active {
+            background-color: var(--azul-principal) !important;
+            color: #fff !important;
+            box-shadow: var(--sombra-leve);
+        }
+
         .search-wrapper {
             position: relative;
-            width: 100%;
             max-width: 600px;
+            width: 100%;
         }
-        .search-bar { 
-            width: 100%; 
-            padding: 16px 20px 16px 50px; 
-            background-color: var(--bg-surface);
-            border: none; 
-            border-radius: 16px; 
-            font-size: 1rem; 
-            color: var(--text-main);
-            box-shadow: var(--sombra-leve);
-            transition: all 0.3s ease;
-        }
-        .search-bar:focus { outline: none; box-shadow: var(--sombra-forte); }
-        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
 
-        /* CONTEÚDO E CARTÕES COM PROFUNDIDADE */
-        .conteudo { padding: 20px 40px 40px 40px; max-width: 1000px; margin: 0 auto; width: 100%; }
-        .titulo-pagina { margin-bottom: 30px; font-size: 2rem; font-weight: 800; color: var(--azul-principal); }
-        
-        .cartao-termo { 
-            background-color: var(--bg-surface); 
-            padding: 28px; 
+        .search-bar {
+            padding-left: 2.8rem;
+            border-radius: 1rem;
             border: none;
-            border-radius: 20px; 
-            margin-bottom: 24px; 
             box-shadow: var(--sombra-leve);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
-        /* Detalhe azul no canto do cartão */
-        .cartao-termo::before {
-            content: '';
+
+        .search-bar:focus {
+            box-shadow: var(--sombra-forte);
+        }
+
+        .search-icon {
             position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 6px;
-            background-color: var(--azul-principal);
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
         }
-        .cartao-termo:hover { 
-            transform: translateY(-5px); 
-            box-shadow: var(--sombra-forte); 
+
+        .cartao-termo {
+            border: none;
+            border-left: 6px solid var(--azul-principal);
+            border-radius: 1rem;
+            box-shadow: var(--sombra-leve);
+            transition: all 0.3s ease;
         }
-        .cartao-termo h3 { margin-bottom: 12px; color: var(--text-main); font-size: 1.4rem; font-weight: 700; }
-        .cartao-termo p { color: var(--text-muted); line-height: 1.7; font-size: 1.05rem; margin-bottom: 20px; }
-        
-        .rodape-cartao { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #94a3b8; font-weight: 500; }
-        .avatar-sala { width: 32px; height: 32px; background-color: var(--azul-claro); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--azul-principal); font-weight: bold; font-size: 0.9rem; }
-        
-        .mensagem-vazia { text-align: center; color: var(--text-muted); margin-top: 60px; font-size: 1.2rem; font-weight: 500; }
+
+        .cartao-termo:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sombra-forte);
+        }
+
+        .avatar-sala {
+            width: 32px;
+            height: 32px;
+            background-color: rgba(13, 110, 253, 0.1);
+            color: var(--azul-principal);
+        }
+
+        .btn-acao {
+            box-shadow: var(--sombra-leve);
+            transition: all 0.3s;
+        }
+
+        .btn-acao:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--sombra-forte);
+        }
     </style>
 </head>
-<body>
 
-    <nav class="sidebar">
-        <div class="logo"><span>📘</span> Tecna</div>
-        <ul class="menu">
-            <li><a href="index.php">🏠 Início</a></li>
-            
-            <div class="menu-titulo">Categorias</div>
-            <li><a onclick="carregarTermos(1, 'Português')" id="menu-cat-1" class="ativo">📚 Português</a></li>
-            <li><a onclick="carregarTermos(2, 'Matemática')" id="menu-cat-2">📐 Matemática</a></li>
+<body class="d-flex flex-column flex-md-row">
+
+    <nav class="sidebar bg-white d-flex flex-column p-4">
+        <a href="index.php" class="d-flex align-items-center mb-4 text-decoration-none text-primary fs-4 fw-bold">
+            <i class="bi bi-book-half me-2"></i> Tecna
+        </a>
+
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mb-2">
+                <a href="index.php" class="nav-link">
+                    <i class="bi bi-house-door me-2"></i> Início
+                </a>
+            </li>
+            <li class="mt-4 mb-2 text-muted text-uppercase small fw-bold px-3">Categorias</li>
+            <li class="nav-item mb-2">
+                <a onclick="carregarTermos(1, 'Português')" id="menu-cat-1" class="nav-link active" style="cursor: pointer;">
+                    <i class="bi bi-journal-text me-2"></i> Português
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a onclick="carregarTermos(2, 'Matemática')" id="menu-cat-2" class="nav-link" style="cursor: pointer;">
+                    <i class="bi bi-calculator me-2"></i> Matemática
+                </a>
+            </li>
         </ul>
-        <a href="login.php" class="btn-login">Acessar Conta</a>
+
+        <hr>
+
+        <div class="mt-auto">
+            <?php
+            // ==========================================
+            // LÓGICA DO BOTÃO INTELIGENTE
+            // ==========================================
+            if (isset($_SESSION['usuario_id'])) {
+                // Se estiver logado, checa se é professor ou aluno para mandar pro lugar certo
+                if ($_SESSION['tipo'] === 'professor') {
+                    echo '<a href="dashboard_professor.php" class="btn btn-success w-100 fw-bold py-2 btn-acao">
+                            <i class="bi bi-person-badge-fill me-2"></i> Meu Painel
+                          </a>';
+                } else {
+                    echo '<a href="dashboard_aluno.php" class="btn btn-success w-100 fw-bold py-2 btn-acao">
+                            <i class="bi bi-person-workspace me-2"></i> Meu Painel
+                          </a>';
+                }
+            } else {
+                // Se NÃO estiver logado, mostra o botão normal de login
+                echo '<a href="login.php" class="btn btn-primary w-100 fw-bold py-2 btn-acao">
+                        <i class="bi bi-person-circle me-2"></i> Acessar Conta
+                      </a>';
+            }
+            ?>
+        </div>
     </nav>
 
-    <main class="main-content">
-        <header class="top-bar">
+    <main class="flex-grow-1 d-flex flex-column" style="height: 100vh; overflow-y: auto;">
+
+        <header class="p-4 d-flex align-items-center">
             <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-bar" placeholder="Busque por termos, conceitos ou palavras-chave...">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" class="form-control form-control-lg search-bar fs-6" placeholder="Busque por termos, conceitos ou palavras-chave...">
             </div>
         </header>
 
-        <section class="conteudo">
-            <h2 class="titulo-pagina" id="titulo-categoria">Português</h2>
-            
+        <section class="p-4 p-md-5 pt-0 w-100" style="max-width: 900px; margin: 0 auto;">
+            <h2 class="fw-bold text-primary mb-4" id="titulo-categoria">Português</h2>
+
             <div id="lista-termos">
-                <p class="mensagem-vazia">Carregando termos...</p>
+                <div class="text-center text-muted mt-5">
+                    <div class="spinner-border text-primary mb-2" role="status"></div>
+                    <p>Carregando termos...</p>
+                </div>
             </div>
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         async function carregarTermos(categoriaId, nomeCategoria) {
             document.getElementById('titulo-categoria').innerText = nomeCategoria;
-            document.querySelectorAll('.menu a').forEach(a => a.classList.remove('ativo'));
-            document.getElementById(`menu-cat-${categoriaId}`).classList.add('ativo');
+            document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+            document.getElementById(`menu-cat-${categoriaId}`).classList.add('active');
 
             const divLista = document.getElementById('lista-termos');
-            divLista.innerHTML = '<p class="mensagem-vazia">Carregando termos...</p>';
+            divLista.innerHTML = '<div class="text-center text-muted mt-5"><div class="spinner-border text-primary mb-2" role="status"></div><p>Carregando termos...</p></div>';
 
             try {
-                // Caminho da API
                 const resposta = await fetch(`api/api_termos.php?categoria=${categoriaId}`);
                 const termos = await resposta.json();
 
-                divLista.innerHTML = ''; 
+                divLista.innerHTML = '';
 
                 if (termos.length === 0) {
-                    divLista.innerHTML = '<p class="mensagem-vazia">Nenhum termo aprovado nesta categoria ainda. ✨</p>';
+                    divLista.innerHTML = `
+                        <div class="alert alert-light text-center text-muted shadow-sm rounded-4 py-4" role="alert">
+                            <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
+                            Nenhum termo aprovado nesta categoria ainda. ✨
+                        </div>
+                    `;
                     return;
                 }
 
                 termos.forEach(termo => {
                     const cartao = document.createElement('div');
-                    cartao.className = 'cartao-termo';
-                    
+                    cartao.className = 'card cartao-termo mb-4 bg-white p-2';
                     const inicial = termo.enviado_por.charAt(0).toUpperCase();
-                    
+
                     cartao.innerHTML = `
-                        <h3>${termo.palavra}</h3>
-                        <p>${termo.descricao}</p>
-                        <div class="rodape-cartao">
-                            <div class="avatar-sala">${inicial}</div>
-                            <span>Enviado por ${termo.enviado_por}</span>
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold text-dark mb-3">${termo.palavra}</h4>
+                            <p class="card-text text-secondary mb-4 lh-lg">${termo.descricao}</p>
+                            <div class="d-flex align-items-center text-muted small fw-medium">
+                                <div class="avatar-sala rounded-circle d-flex align-items-center justify-content-center me-2">${inicial}</div>
+                                Enviado por ${termo.enviado_por}
+                            </div>
                         </div>
                     `;
                     divLista.appendChild(cartao);
@@ -222,7 +232,7 @@
 
             } catch (erro) {
                 console.error("Erro ao buscar API:", erro);
-                divLista.innerHTML = '<p class="mensagem-vazia" style="color: #ef4444;">Erro ao carregar os dados do servidor.</p>';
+                divLista.innerHTML = `<div class="alert alert-danger text-center shadow-sm rounded-4 py-4" role="alert"><i class="bi bi-exclamation-triangle fs-4 d-block mb-2"></i>Erro ao carregar os dados do servidor.</div>`;
             }
         }
 
@@ -231,4 +241,5 @@
         };
     </script>
 </body>
+
 </html>
