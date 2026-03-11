@@ -1,11 +1,8 @@
 <?php
-// 1. Cabeçalhos obrigatórios para uma API
-// Permite que o Front-end (HTML/JS) acesse essa página sem bloqueios (CORS)
 header("Access-Control-Allow-Origin: *");
-// Avisa ao navegador que a resposta será no formato JSON
 header("Content-Type: application/json; charset=UTF-8");
 
-// 2. Configurações de conexão com o Banco de Dados
+
 $host = "localhost";
 $usuario = "root";  // Padrão do XAMPP
 $senha = "";        // Padrão do XAMPP (geralmente vazio)
