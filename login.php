@@ -16,8 +16,8 @@
             --bg-body: #f1f5f9;
             --text-main: #1e293b;
             --text-muted: #64748b;
-            --primary: #e11d48;
-            --primary-hover: #be123c;
+            --primary: #4338ca; /* Azul/índigo para o login */
+            --primary-hover: #3730a3;
             --border: #cbd5e1;
         }
 
@@ -48,7 +48,7 @@
         .icon-box {
             width: 60px;
             height: 60px;
-            background-color: rgba(225, 29, 72, 0.1);
+            background-color: rgba(67, 56, 202, 0.1);
             color: var(--primary);
             border-radius: 16px;
             display: flex;
@@ -93,7 +93,7 @@
         .form-control:focus {
             background-color: #fff;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
+            box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.1);
             outline: none;
         }
 
@@ -112,7 +112,7 @@
         .btn-crimson:hover {
             background-color: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(67, 56, 202, 0.3);
         }
 
         .btn-crimson:active {

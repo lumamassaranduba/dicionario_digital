@@ -45,13 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['categoria_id'] = $usuario['categoria_id']; // Guarda a matéria do professor!
 
                 // ==========================================
-                // AQUI ESTÁ A CORREÇÃO DOS NOMES DAS PÁGINAS!
+                // DIRECIONA TODOS PARA A PÁGINA PRINCIPAL (index.php)
                 // ==========================================
-                if ($usuario['tipo'] === 'professor') {
-                    $pagina_destino = 'dashboard_professor.php'; // Nome atualizado!
-                } else {
-                    $pagina_destino = 'dashboard_aluno.php'; // Nome atualizado!
-                }
+                // Agora o conteúdo muda dentro da mesma página, mantendo o menu sempre igual.
+                $pagina_destino = 'index.php?view=home';
 
                 // Devolve para o JavaScript um JSON dizendo que deu certo e para onde ir
                 echo json_encode(array(

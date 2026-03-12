@@ -8,17 +8,18 @@ CREATE TABLE categorias (
     nome VARCHAR(50) NOT NULL
 );
 
--- 2. Tabela de Usuários (AGORA COM A MATÉRIA DO PROFESSOR)
+-- 2. Tabela de Usuários (AGORA COM A COLUNA EMAIL)
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL, 
+    email VARCHAR(100) UNIQUE NOT NULL, -- Nova coluna para o usuário conseguir fazer login!
     tipo ENUM('aluno', 'professor') NOT NULL, 
     senha VARCHAR(50) NOT NULL,
-    categoria_id INT NULL, -- Nova coluna! (Pode ser NULL para alunos)
+    categoria_id INT NULL, -- Amarra o professor à matéria dele
     FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
 
--- 3. Tabela de Termos (Continua igual)
+-- 3. Tabela de Termos (Continua perfeita)
 CREATE TABLE termos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     palavra VARCHAR(100) NOT NULL,
@@ -36,12 +37,12 @@ CREATE TABLE termos (
 
 INSERT INTO categorias (nome) VALUES ('Português'), ('Matemática');
 
--- Inserindo usuários (Agora o professor está amarrado à matéria dele)
-INSERT INTO usuarios (nome, tipo, senha, categoria_id) VALUES 
-('Professor de Português', 'professor', 'senha123', 1), -- ID 1 = Português
-('Professor de Matemática', 'professor', 'senha123', 2), -- ID 2 = Matemática
-('Sala 1A', 'aluno', 'sala1a', NULL), -- Aluno não tem categoria específica
-('Sala 2B', 'aluno', 'sala2b', NULL);
+-- Inserindo usuários (Agora com um e-mail/login curto e fácil para testar)
+INSERT INTO usuarios (nome, email, tipo, senha, categoria_id) VALUES 
+('Professor de Português', 'profport@senai.br', 'professor', 'senha123', 1), 
+('Professor de Matemática', 'profmat@senai.br', 'professor', 'senha123', 2), 
+('Sala 1A', 'sala1a@senai.br', 'aluno', 'sala1a', NULL), 
+('Sala 2B', 'sala2b@senai.br', 'aluno', 'sala2b', NULL);
 
 -- Inserindo termos
 INSERT INTO termos (palavra, descricao, status, categoria_id, usuario_id) VALUES 
