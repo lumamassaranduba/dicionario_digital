@@ -26,7 +26,9 @@ $nome = $categoriaId === 2 ? 'Matemática' : 'Português';
     </section>
 
     <script>
-        (function(){
+    (function waitForFuncs(){
+        // espera até as funções do footer estarem carregadas
+        if (typeof carregarTermos === 'function' && typeof debounce === 'function') {
             const categoriaId = <?php echo json_encode($categoriaId); ?>;
             const nome = <?php echo json_encode($nome); ?>;
             const searchInput = document.getElementById('search-input');
@@ -38,7 +40,10 @@ $nome = $categoriaId === 2 ? 'Matemática' : 'Português';
             }
             // carregamento inicial
             carregarTermos(categoriaId, nome);
-        })();
+        } else {
+            setTimeout(waitForFuncs, 50);
+        }
+    })();
     </script>
 
 <?php include __DIR__ . '/inc/footer.php'; ?>
