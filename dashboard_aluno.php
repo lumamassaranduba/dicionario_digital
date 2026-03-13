@@ -14,7 +14,7 @@ $view = isset($_GET['view']) ? $_GET['view'] : 'inicio';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel da Sala - Tecna</title>
+    <title>Painel da Sala - Dicionário Digital</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -97,7 +97,7 @@ $view = isset($_GET['view']) ? $_GET['view'] : 'inicio';
 
     <nav class="sidebar bg-white d-flex flex-column p-4">
         <a href="index.php" class="d-flex align-items-center mb-4 text-decoration-none text-primary fs-4 fw-bold">
-            <i class="bi bi-book-half me-2"></i> Tecna
+            <i class="bi bi-book-half me-2"></i> Dicionário Digital
         </a>
 
         <div class="mb-4 p-3 bg-light rounded text-center border">

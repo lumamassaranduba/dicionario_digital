@@ -37,7 +37,7 @@ if(
         echo json_encode(array("erro" => "Erro interno ao preparar a query."));
     }
 } else {
-   
+    
     http_response_code(400); 
     echo json_encode(array("erro" => "Dados incompletos. Preencha todos os campos obrigatórios."));
 }
