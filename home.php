@@ -19,7 +19,7 @@ include __DIR__ . '/inc/header.php';
                 </a>
             </div>
             <div class="col-md-6">
-                <a href="termos.php?categoria=2" class="card cartao-termo h-100 text-decoration-none" style="border-left-color: #dc3545;">
+                <a href="termos.php?categoria=2" class="card cartao-termo h-100 text-decoration-none" style="border-left-color: #910714ff;">
                     <div class="card-body">
                         <h3 class="card-title fw-bold">Matemática</h3>
                         <p class="card-text text-muted">Explore termos aprovados para Matemática.</p>

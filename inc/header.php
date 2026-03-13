@@ -31,7 +31,7 @@ function isActive($name) {
 
     <style>
         :root {
-            --accent: #0d6efd;
+            --accent: #0c3a80ff;
             --accent-fade: rgba(13, 110, 253, 0.1);
             --sombra-leve: 0 4px 6px -1px rgba(13, 110, 253, 0.08), 0 2px 4px -1px rgba(13, 110, 253, 0.04);
             --sombra-forte: 0 20px 25px -5px rgba(13, 110, 253, 0.15), 0 10px 10px -5px rgba(13, 110, 253, 0.08);
@@ -42,7 +42,7 @@ function isActive($name) {
         .btn-accent:hover { background-color: var(--accent); opacity: 0.9; }
         .spinner-accent { color: var(--accent); }
 
-        .categoria-matematica { --accent: #dc3545; --accent-fade: rgba(220,53,69,0.1); --sombra-leve: 0 4px 6px -1px rgba(220,53,69,0.08),0 2px 4px -1px rgba(220,53,69,0.04); --sombra-forte: 0 20px 25px -5px rgba(220,53,69,0.15),0 10px 10px -5px rgba(220,53,69,0.08); }
+        .categoria-matematica { --accent: #70040fff; --accent-fade: rgba(220,53,69,0.1); --sombra-leve: 0 4px 6px -1px rgba(220,53,69,0.08),0 2px 4px -1px rgba(220,53,69,0.04); --sombra-forte: 0 20px 25px -5px rgba(220,53,69,0.15),0 10px 10px -5px rgba(220,53,69,0.08); }
 
         body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
         .sidebar { width: 280px; box-shadow: var(--sombra-leve); z-index: 10; min-height: 100vh; }
@@ -58,6 +58,8 @@ function isActive($name) {
         .avatar-sala { width: 32px; height: 32px; background-color: var(--accent-fade); color: var(--accent); }
         .btn-acao { box-shadow: var(--sombra-leve); transition: all 0.3s; }
         .btn-acao:hover { transform: translateY(-3px); box-shadow: var(--sombra-forte); }
+        .sair{ border: 2px solid #70040fff}
+        .sair:hover{background-color: #70040fff; color: white}
     </style>
 </head>
 
@@ -102,11 +104,11 @@ function isActive($name) {
                     Logado como:<br>
                     <strong class="text-dark"><?php echo htmlspecialchars($usuarioNome); ?></strong>
                 </div>
-                <a href="api/api_logout.php" class="btn btn-outline-danger w-100 fw-bold py-2">
+                <a href="api/api_logout.php" class="btn w-100 fw-bold py-2 sair" >
                     <i class="bi bi-box-arrow-right me-2"></i> Sair
                 </a>
             <?php else: ?>
-                <a href="login.php" class="btn btn-primary w-100 fw-bold py-2 btn-acao">
+                <a href="login.php" class="btn w-100 fw-bold py-2 btn-acao" style="background-color: rgba(13, 110, 253, 0.1);">
                     <i class="bi bi-person-circle me-2"></i> Acessar Conta
                 </a>
             <?php endif; ?>

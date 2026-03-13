@@ -11,20 +11,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
-        /* MANTIDO EXATAMENTE O MESMO CSS DA SUA PARCEIRA */
         :root {
+            /* Paleta Grafite Neutra (Slate) */
+            --cor-primaria: #334155; /* Slate 700 - Grafite Profissional */
+            --cor-hover: #1e293b;    /* Slate 800 - Quase Preto mas ainda Cinza */
             --bg-body: #f1f5f9;
-            --text-main: #1e293b;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #4338ca; /* Azul/índigo para o login */
-            --primary-hover: #3730a3;
             --border: #cbd5e1;
         }
 
         body {
             background-color: var(--bg-body);
-            background-image: radial-gradient(circle at top right, #e2e8f0 0%, transparent 40%),
-                radial-gradient(circle at bottom left, #e2e8f0 0%, transparent 40%);
+            /* Background limpo com toques sutis de cinza */
+            background-image: radial-gradient(circle at 10% 20%, rgba(51, 65, 85, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(51, 65, 85, 0.05) 0%, transparent 20%);
             font-family: 'Inter', sans-serif;
             height: 100vh;
             display: flex;
@@ -37,31 +38,33 @@
             background: #ffffff;
             width: 100%;
             max-width: 420px;
-            padding: 3rem 2.5rem;
+            padding: 3.5rem 2.5rem;
             border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            /* Sombra profunda para dar destaque ao card branco */
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1),
+                        0 10px 10px -5px rgba(15, 23, 42, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.7);
             text-align: center;
         }
 
         .icon-box {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(67, 56, 202, 0.1);
-            color: var(--primary);
+            width: 64px;
+            height: 64px;
+            background-color: #f8fafc;
+            color: var(--cor-primaria);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin: 0 auto 1.5rem;
+            border: 1px solid var(--border);
         }
 
         h2 {
             color: var(--text-main);
             font-weight: 700;
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             letter-spacing: -0.025em;
             margin-bottom: 0.5rem;
         }
@@ -82,61 +85,61 @@
         }
 
         .form-control {
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             border-radius: 12px;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
+            padding: 0.8rem 1rem;
+            background-color: #ffffff;
             transition: all 0.2s;
-            background-color: #f8fafc;
         }
 
         .form-control:focus {
-            background-color: #fff;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.1);
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 4px rgba(51, 65, 85, 0.1);
             outline: none;
         }
 
-        .btn-crimson {
-            background-color: var(--primary);
+        .btn-acesso {
+            background-color: var(--cor-primaria);
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 0.8rem;
+            padding: 0.9rem;
             font-weight: 600;
             width: 100%;
             margin-top: 1rem;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .btn-crimson:hover {
-            background-color: var(--primary-hover);
+        .btn-acesso:hover {
+            background-color: var(--cor-hover);
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(67, 56, 202, 0.3);
-        }
-
-        .btn-crimson:active {
-            transform: translateY(0);
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
         }
 
         .footer-link {
             margin-top: 2rem;
             font-size: 0.85rem;
-            color: var(--text-muted);
         }
 
         .footer-link a {
-            color: var(--primary);
+            color: var(--cor-primaria);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        /* Adicionado apenas o estilo para a mensagem de erro */
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+
         .msg-erro {
-            color: var(--primary);
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fee2e2;
+            padding: 0.75rem;
+            border-radius: 10px;
             font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             display: none;
         }
     </style>
@@ -146,19 +149,18 @@
 
     <div class="login-card">
         <div class="icon-box">
-            <i class="bi bi-journal-bookmark-fill"></i>
+            <i class="bi bi-person-lock"></i>
         </div>
 
-        <h2>Bem-vindo</h2>
-        <p class="subtitle">Acesse o dicionário técnico da sua sala.</p>
+        <h2>Acesso ao Dicionário</h2>
+        <p class="subtitle">Insira suas credenciais para continuar.</p>
 
         <form id="formLogin">
-
-            <div id="mensagem-erro" class="msg-erro">Usuário ou senha inválidos.</div>
+            <div id="mensagem-erro" class="msg-erro"></div>
 
             <div class="mb-3">
-                <label class="form-label">Usuário</label>
-                <input type="text" name="email" class="form-control" placeholder="ex: profmat@gmail.com" required>
+                <label class="form-label">Usuário ou E-mail</label>
+                <input type="text" name="email" class="form-control" placeholder="ex: usuario@escola.com" required>
             </div>
 
             <div class="mb-4">
@@ -166,24 +168,22 @@
                 <input type="password" name="senha" class="form-control" placeholder="••••••••" required>
             </div>
 
-            <button type="submit" class="btn-crimson">Acessar Sistema</button>
+            <button type="submit" class="btn-acesso">Entrar no Sistema</button>
         </form>
 
         <div class="footer-link">
-            <a href="index.php"><i class="bi bi-arrow-left"></i> Voltar para o Início</a>
+            <a href="index.php"><i class="bi bi-arrow-left"></i> Voltar à página inicial</a>
         </div>
     </div>
 
     <script>
         document.getElementById('formLogin').addEventListener('submit', async function(e) {
-            e.preventDefault(); // Impede a página de recarregar
-
+            e.preventDefault();
             const form = e.target;
             const dados = new FormData(form);
             const msgErro = document.getElementById('mensagem-erro');
 
             try {
-                // Envia os dados para a nossa futura API de login
                 const resposta = await fetch('api/api_login.php', {
                     method: 'POST',
                     body: dados
@@ -192,10 +192,8 @@
                 const resultado = await resposta.json();
 
                 if (resultado.sucesso) {
-                    // Se o login deu certo, direciona para o painel correto (aluno ou professor)
                     window.location.href = resultado.redirecionar;
                 } else {
-                    // Mostra a mensagem de erro que veio do PHP
                     msgErro.innerText = resultado.erro;
                     msgErro.style.display = 'block';
                 }
