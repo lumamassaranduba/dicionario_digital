@@ -98,6 +98,16 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalTurmas">
+                    <i class="bi bi-people me-2"></i> Gerenciar Turmas
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalTermosAprovados">
+                    <i class="bi bi-check-circle me-2"></i> Termos Aprovados
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="index.php" class="nav-link">
                     <i class="bi bi-house-door me-2"></i> Ver Dicionário Público
                 </a>
@@ -131,6 +141,85 @@
         </div>
 
     </main>
+
+    <!-- Modal Gerenciar Turmas -->
+    <div class="modal fade" id="modalTurmas" tabindex="-1" aria-labelledby="modalTurmasLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTurmasLabel">Gerenciar Turmas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="lista-turmas"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Turma -->
+    <div class="modal fade" id="modalEditarTurma" tabindex="-1" aria-labelledby="modalEditarTurmaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarTurmaLabel">Editar Turma</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarTurma">
+                        <input type="hidden" id="editar-turma-id">
+                        <div class="mb-3">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="editar-turma-nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editar-turma-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Senha</label>
+                            <input type="text" class="form-control" id="editar-turma-senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Termo -->
+    <div class="modal fade" id="modalEditarTermo" tabindex="-1" aria-labelledby="modalEditarTermoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarTermoLabel">Editar Termo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarTermo">
+                        <input type="hidden" id="editar-termo-id">
+                        <div class="mb-3">
+                            <label class="form-label">Palavra</label>
+                            <input type="text" class="form-control" id="editar-termo-palavra" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" id="editar-termo-descricao" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Exemplo</label>
+                            <textarea class="form-control" id="editar-termo-exemplo" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Imagem</label>
+                            <input type="file" class="form-control" id="editar-termo-imagem" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -166,7 +255,9 @@
                         <div class="card-body d-flex justify-content-between align-items-start flex-wrap gap-3">
                             <div class="flex-grow-1" style="min-width: 250px;">
                                 <h4 class="card-title fw-bold text-dark mb-2">${termo.palavra}</h4>
+                                ${termo.exemplo ? `<p class="card-text text-secondary mb-2"><strong>Exemplo:</strong> ${termo.exemplo}</p>` : ''}
                                 <p class="card-text text-secondary mb-3">${termo.descricao}</p>
+                                ${termo.imagem ? `<img src="${termo.imagem}" alt="${termo.palavra}" class="img-fluid rounded mb-3" />` : ''}
                                 <div class="text-muted small fw-medium">
                                     <i class="bi bi-person me-1"></i> Enviado por: <span class="text-dark">${termo.nome_aluno}</span>
                                 </div>
@@ -226,8 +317,80 @@
             }
         }
 
+        // Função para carregar turmas
+        async function carregarTurmas() {
+            const div = document.getElementById('lista-turmas');
+            div.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>';
+            try {
+                const resp = await fetch('api/api_turmas.php');
+                const turmas = await resp.json();
+                let html = '<table class="table"><thead><tr><th>Nome</th><th>Email</th><th>Senha</th><th>Ações</th></tr></thead><tbody>';
+                turmas.forEach(t => {
+                    html += `<tr><td>${t.nome}</td><td>${t.email}</td><td>${t.senha}</td><td><button class="btn btn-sm btn-warning" onclick="editarTurma(${t.id})">Editar</button> <button class="btn btn-sm btn-danger" onclick="excluirTurma(${t.id})">Excluir</button></td></tr>`;
+                });
+                html += '</tbody></table>';
+                div.innerHTML = html;
+            } catch (err) {
+                div.innerHTML = '<div class="alert alert-danger">Erro ao carregar turmas.</div>';
+            }
+        }
+
+        // Função para carregar termos aprovados
+        async function carregarTermosAprovados() {
+            const div = document.getElementById('lista-termos-aprovados');
+            div.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>';
+            try {
+                const resp = await fetch('api/api_termos_aprovados.php');
+                const termos = await resp.json();
+                let html = '<table class="table"><thead><tr><th>Palavra</th><th>Descrição</th><th>Ações</th></tr></thead><tbody>';
+                termos.forEach(t => {
+                    html += `<tr><td>${t.palavra}</td><td>${t.descricao.substring(0,50)}...</td><td><button class="btn btn-sm btn-warning" onclick="editarTermo(${t.id})">Editar</button> <button class="btn btn-sm btn-danger" onclick="excluirTermo(${t.id})">Excluir</button></td></tr>`;
+                });
+                html += '</tbody></table>';
+                div.innerHTML = html;
+            } catch (err) {
+                div.innerHTML = '<div class="alert alert-danger">Erro ao carregar termos.</div>';
+            }
+        }
+
+        // Função para editar turma
+        function editarTurma(id) {
+            // Placeholder: abrir modal com dados
+            const modal = new bootstrap.Modal(document.getElementById('modalEditarTurma'));
+            document.getElementById('editar-turma-id').value = id;
+            // Carregar dados da turma
+            modal.show();
+        }
+
+        // Função para excluir turma
+        function excluirTurma(id) {
+            if (confirm('Excluir turma?')) {
+                // Implementar exclusão
+            }
+        }
+
+        // Função para editar termo
+        function editarTermo(id) {
+            // Placeholder: abrir modal com dados
+            const modal = new bootstrap.Modal(document.getElementById('modalEditarTermo'));
+            document.getElementById('editar-termo-id').value = id;
+            // Carregar dados do termo
+            modal.show();
+        }
+
+        // Função para excluir termo
+        function excluirTermo(id) {
+            if (confirm('Excluir termo?')) {
+                // Implementar exclusão
+            }
+        }
+
         // Carrega a lista assim que a página abre
         window.onload = carregarPendentes;
+
+        // Carregar turmas no modal
+        document.getElementById('modalTurmas').addEventListener('show.bs.modal', carregarTurmas);
+        document.getElementById('modalTermosAprovados').addEventListener('show.bs.modal', carregarTermosAprovados);
     </script>
 </body>
 

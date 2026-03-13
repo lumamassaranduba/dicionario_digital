@@ -26,6 +26,15 @@ include __DIR__ . '/inc/header.php';
                     <label class="form-label">Descrição</label>
                     <textarea id="editar-descricao" class="form-control" rows="4"></textarea>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Exemplo</label>
+                    <textarea id="editar-exemplo" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">URL da imagem</label>
+                    <input id="editar-imagem" class="form-control" type="url">
+                    <div class="form-text">URL pública da imagem relacionada ao termo.</div>
+                </div>
                 <div class="d-flex gap-2">
                     <button id="btn-salvar-termo" class="btn btn-primary">Salvar</button>
                     <button id="btn-cancelar-edicao" class="btn btn-secondary">Cancelar</button>
@@ -75,11 +84,13 @@ include __DIR__ . '/inc/header.php';
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h5 class="fw-bold mb-1">${escapeHtml(t.palavra)}</h5>
+                                        ${t.exemplo ? `<p class="mb-2 text-secondary"><strong>Exemplo:</strong> ${escapeHtml(t.exemplo)}</p>` : ''}
                                         <div class="text-muted small mb-2">Categoria: ${escapeHtml(t.categoria || '—')} • Enviado por ${escapeHtml(t.enviado_por)}</div>
                                         <p class="mb-0 text-secondary lh-lg">${escapeHtml(descricaoCurta)}</p>
+                                        ${t.imagem ? `<img src="${escapeHtml(t.imagem)}" alt="${escapeHtml(t.palavra)}" class="img-fluid rounded mt-3" />` : ''}
                                     </div>
                                     <div class="ms-3 text-end">
-                                        <button class="btn btn-sm btn-outline-primary btn-editar" data-id="${t.id}" data-palavra="${escapeAttr(t.palavra)}" data-descricao="${escapeAttr(t.descricao)}" data-categoria="${t.categoria_id}">Editar</button>
+                                        <button class="btn btn-sm btn-outline-primary btn-editar" data-id="${t.id}" data-palavra="${escapeAttr(t.palavra)}" data-descricao="${escapeAttr(t.descricao)}" data-exemplo="${escapeAttr(t.exemplo)}" data-imagem="${escapeAttr(t.imagem)}" data-categoria="${t.categoria_id}">Editar</button>
                                         <button class="btn btn-sm btn-danger btn-deletar" data-id="${t.id}">Excluir</button>
                                     </div>
                                 </div>
@@ -110,12 +121,16 @@ include __DIR__ . '/inc/header.php';
             const id = btn.getAttribute('data-id');
             const palavra = btn.getAttribute('data-palavra');
             const descricao = btn.getAttribute('data-descricao');
+            const exemplo = btn.getAttribute('data-exemplo');
+            const imagem = btn.getAttribute('data-imagem');
             const categoria = btn.getAttribute('data-categoria') || '1';
 
             document.getElementById('edicao-mensagem').className = 'alert d-none';
             document.getElementById('editar-id').value = id;
             document.getElementById('editar-palavra').value = palavra;
             document.getElementById('editar-descricao').value = descricao;
+            document.getElementById('editar-exemplo').value = exemplo;
+            document.getElementById('editar-imagem').value = imagem;
             document.getElementById('editar-categoria').value = categoria;
             document.getElementById('area-edicao').classList.remove('d-none');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -129,16 +144,18 @@ include __DIR__ . '/inc/header.php';
             const id = document.getElementById('editar-id').value;
             const palavra = document.getElementById('editar-palavra').value.trim();
             const descricao = document.getElementById('editar-descricao').value.trim();
+            const exemplo = document.getElementById('editar-exemplo').value.trim();
+            const imagem = document.getElementById('editar-imagem').value.trim();
             const categoria = parseInt(document.getElementById('editar-categoria').value, 10) || 1;
             const msg = document.getElementById('edicao-mensagem');
             msg.className = 'alert d-none';
 
-            if (palavra === '' || descricao === '') { msg.className = 'alert alert-danger'; msg.innerText = 'Palavra e descrição não podem ficar vazias.'; return; }
+            if (palavra === '' || descricao === '' || exemplo === '' || imagem === '') { msg.className = 'alert alert-danger'; msg.innerText = 'Todos os campos são obrigatórios.'; return; }
 
             try {
                 const resp = await fetch('api/api_editar_termo.php', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: id, palavra: palavra, descricao: descricao, categoria_id: categoria })
+                    body: JSON.stringify({ id: id, palavra: palavra, descricao: descricao, exemplo: exemplo, imagem: imagem, categoria_id: categoria })
                 });
                 const resultado = await resp.json();
                 if (resultado.sucesso) {

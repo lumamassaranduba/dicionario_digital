@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'professor') {
     exit;
 }
 
-$sql = "SELECT t.id, t.palavra, t.descricao, t.categoria_id, c.nome AS categoria, u.nome AS enviado_por
+$sql = "SELECT t.id, t.palavra, t.descricao, t.exemplo, t.imagem, t.categoria_id, c.nome AS categoria, u.nome AS enviado_por
         FROM termos t
         JOIN usuarios u ON t.usuario_id = u.id
         LEFT JOIN categorias c ON t.categoria_id = c.id

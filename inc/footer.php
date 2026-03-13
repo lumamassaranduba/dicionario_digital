@@ -69,6 +69,8 @@
                         <div class="card-body">
                             <h4 class="card-title fw-bold text-dark mb-3">${termo.palavra}</h4>
                             <p class="card-text text-secondary mb-4 lh-lg">${termo.descricao}</p>
+                            ${termo.exemplo ? `<p class="card-text text-secondary mb-3"><strong>Exemplo:</strong> ${termo.exemplo}</p>` : ''}
+                            ${termo.imagem ? `<div class="mb-4"><img src="${termo.imagem}" alt="${termo.palavra}" class="img-fluid rounded" /></div>` : ''}
                             <div class="d-flex align-items-center text-muted small fw-medium">
                                 <div class="avatar-sala rounded-circle d-flex align-items-center justify-content-center me-2">${inicial}</div>
                                 Enviado por ${termo.enviado_por}

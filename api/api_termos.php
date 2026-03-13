@@ -9,6 +9,7 @@ $q = isset($_GET['q']) ? trim($_GET['q']) : '';
 
 // Busca por termos aprovados da categoria, opcionalmente filtrando por palavra/descrição
 $sql = "SELECT t.id, t.palavra, t.descricao, u.nome AS enviado_por 
+    , t.exemplo, t.imagem
         FROM termos t
         JOIN usuarios u ON t.usuario_id = u.id
         WHERE t.categoria_id = ? AND t.status = 'aprovado'";

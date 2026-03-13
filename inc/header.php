@@ -108,7 +108,7 @@ function isActive($name) {
                     <i class="bi bi-box-arrow-right me-2"></i> Sair
                 </a>
             <?php else: ?>
-                <a href="login.php" class="btn w-100 fw-bold py-2 btn-acao" style="background-color: rgba(13, 110, 253, 0.1);">
+                <a href="login.php" class="btn w-100 fw-bold py-2 sair" style="background-color: rgba(13, 110, 253, 0.1);">
                     <i class="bi bi-person-circle me-2"></i> Acessar Conta
                 </a>
             <?php endif; ?>

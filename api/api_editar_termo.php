@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'professor') {
 }
 
 $dados = json_decode(file_get_contents('php://input'));
-if (empty($dados->id) || empty($dados->palavra) || empty($dados->descricao) || empty($dados->categoria_id)) {
+if (empty($dados->id) || empty($dados->palavra) || empty($dados->descricao) || empty($dados->categoria_id) || empty($dados->exemplo) || empty($dados->imagem)) {
     echo json_encode(["sucesso" => false, "erro" => "Dados incompletos."]);
     exit;
 }
@@ -20,16 +20,18 @@ $id = intval($dados->id);
 $palavra = trim($dados->palavra);
 $descricao = trim($dados->descricao);
 $categoria_id = intval($dados->categoria_id);
+ $exemplo = trim($dados->exemplo);
+ $imagem = trim($dados->imagem);
 
 if ($palavra === '' || $descricao === '') {
     echo json_encode(["sucesso" => false, "erro" => "Palavra e descrição não podem ser vazias."]);
     exit;
 }
 
-$sql = "UPDATE termos SET palavra = ?, descricao = ?, categoria_id = ? WHERE id = ?";
+$sql = "UPDATE termos SET palavra = ?, descricao = ?, exemplo = ?, imagem = ?, categoria_id = ? WHERE id = ?";
 $stmt = $conexao->prepare($sql);
 if ($stmt) {
-    $stmt->bind_param('ssii', $palavra, $descricao, $categoria_id, $id);
+    $stmt->bind_param('sssisi', $palavra, $descricao, $exemplo, $imagem, $categoria_id, $id);
     if ($stmt->execute()) {
         echo json_encode(["sucesso" => true, "mensagem" => "Termo atualizado."]);
     } else {

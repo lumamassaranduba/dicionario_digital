@@ -10,23 +10,37 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'aluno') {
     exit;
 }
 
-// Pega os dados JSON do formulário
-$dados = json_decode(file_get_contents("php://input"));
+// Pega os dados do formulário multipart
+if (!empty($_POST['palavra']) && !empty($_POST['descricao']) && !empty($_POST['categoria_id']) && !empty($_POST['exemplo']) && isset($_FILES['imagem'])) {
 
-if (!empty($dados->palavra) && !empty($dados->descricao) && !empty($dados->categoria_id)) {
+$palavra = trim($_POST['palavra']);
+$descricao = trim($_POST['descricao']);
+$exemplo = trim($_POST['exemplo']);
+$categoria_id = intval($_POST['categoria_id']);
+$usuario_id = $_SESSION['usuario_id'];
+$status = 'pendente';
 
-    $palavra = trim($dados->palavra);
-    $descricao = trim($dados->descricao);
-    $categoria_id = intval($dados->categoria_id);
-    $usuario_id = $_SESSION['usuario_id']; // O banco sabe quem enviou pelo ID da sessão!
-    $status = 'pendente'; // Sempre entra como pendente até o professor aprovar
+// Lidar com upload de imagem
+$imagem = '';
+if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+    $uploadDir = '../uploads/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+    $fileName = uniqid() . '_' . basename($_FILES['imagem']['name']);
+    $uploadFile = $uploadDir . $fileName;
+    if (move_uploaded_file($_FILES['imagem']['tmp_name'], $uploadFile)) {
+        $imagem = 'uploads/' . $fileName;
+    } else {
+        echo json_encode(["sucesso" => false, "erro" => "Erro ao salvar imagem."]);
+        exit;
+    }
+}
 
     // Prepara a inserção no banco
-    $sql = "INSERT INTO termos (palavra, descricao, status, categoria_id, usuario_id) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO termos (palavra, descricao, exemplo, imagem, status, categoria_id, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conexao->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("sssii", $palavra, $descricao, $status, $categoria_id, $usuario_id);
+        $stmt->bind_param("sssssii", $palavra, $descricao, $exemplo, $imagem, $status, $categoria_id, $usuario_id);
 
         if ($stmt->execute()) {
             echo json_encode(["sucesso" => true, "mensagem" => "Termo enviado com sucesso! Aguarde a aprovação do professor."]);
@@ -37,6 +51,9 @@ if (!empty($dados->palavra) && !empty($dados->descricao) && !empty($dados->categ
     } else {
         echo json_encode(["sucesso" => false, "erro" => "Erro interno no servidor."]);
     }
+} else {
+    echo json_encode(["sucesso" => false, "erro" => "Por favor, preencha todos os campos."]);
+}
 } else {
     echo json_encode(["sucesso" => false, "erro" => "Por favor, preencha todos os campos."]);
 }

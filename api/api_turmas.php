@@ -10,7 +10,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'professor') {
 }
 
 $turmas = [];
-$sql = "SELECT id, nome, email, senha FROM usuarios WHERE tipo = 'aluno' ORDER BY nome ASC";
+$sql = "SELECT t.id, t.nome, t.email, t.senha, c.nome AS categoria FROM turmas t JOIN categorias c ON t.categoria_id = c.id ORDER BY t.nome ASC";
 $resultado = $conexao->query($sql);
 if ($resultado) {
     while ($linha = $resultado->fetch_assoc()) {

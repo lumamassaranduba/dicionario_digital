@@ -14,6 +14,7 @@ $categoria_id = isset($_GET['categoria_id']) ? intval($_GET['categoria_id']) : 0
 
 // Busca apenas termos 'pendentes' daquela categoria
 $sql = "SELECT t.id, t.palavra, t.descricao, u.nome AS nome_aluno 
+    , t.exemplo, t.imagem
         FROM termos t
         JOIN usuarios u ON t.usuario_id = u.id
         WHERE t.categoria_id = $categoria_id AND t.status = 'pendente'";

@@ -38,6 +38,17 @@ include __DIR__ . '/inc/header.php';
                         <textarea name="descricao" class="form-control" rows="4" placeholder="Explique o que significa com suas palavras..." required></textarea>
                     </div>
 
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Exemplo</label>
+                        <textarea name="exemplo" class="form-control" rows="3" placeholder="Use em uma frase ou contexto." required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">URL da imagem</label>
+                        <input type="file" name="imagem" accept="image/*" required>
+                        <div class="form-text">Selecione uma imagem relacionada ao termo.</div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">
                         <i class="bi bi-send-fill me-2"></i> Enviar para o Professor
                     </button>
@@ -86,8 +97,10 @@ include __DIR__ . '/inc/header.php';
                         <div class="card mb-3 shadow-sm">
                             <div class="card-body">
                                 <h5 class="fw-bold mb-1">${escapeHtml(t.palavra)}</h5>
+                                ${t.exemplo ? `<p class="mb-2 text-secondary"><strong>Exemplo:</strong> ${escapeHtml(t.exemplo)}</p>` : ''}
                                 <div class="text-muted small mb-2">Enviado por ${escapeHtml(t.nome_aluno)}</div>
                                 <p class="mb-3 text-secondary">${escapeHtml(descricaoCurta)}</p>
+                                ${t.imagem ? `<img src="${escapeHtml(t.imagem)}" alt="${escapeHtml(t.palavra)}" class="img-fluid rounded mb-3" />` : ''}
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-success btn-aprovar" data-id="${t.id}">Aprovar</button>
                                     <button class="btn btn-outline-danger btn-rejeitar" data-id="${t.id}">Rejeitar</button>

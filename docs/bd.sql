@@ -8,6 +8,16 @@ CREATE TABLE categorias (
     nome VARCHAR(50) NOT NULL
 );
 
+-- 1.5. Tabela de Turmas
+CREATE TABLE turmas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(50) NOT NULL,
+    categoria_id INT NOT NULL,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+);
+
 -- 2. Tabela de Usuários (AGORA COM A COLUNA EMAIL)
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,6 +34,8 @@ CREATE TABLE termos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     palavra VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
+    exemplo TEXT NULL,
+    imagem VARCHAR(255) NULL,
     status ENUM('pendente', 'aprovado', 'rejeitado') DEFAULT 'pendente',
     categoria_id INT NOT NULL,
     usuario_id INT NOT NULL, 
@@ -36,6 +48,11 @@ CREATE TABLE termos (
 -- ==========================================
 
 INSERT INTO categorias (nome) VALUES ('Português'), ('Matemática');
+
+-- Inserindo turmas
+INSERT INTO turmas (nome, email, senha, categoria_id) VALUES 
+('Sala 1A', 'sala1a@senai.br', 'sala1a', 1), 
+('Sala 2B', 'sala2b@senai.br', 'sala2b', 2);
 
 -- Inserindo usuários (Agora com um e-mail/login curto e fácil para testar)
 INSERT INTO usuarios (nome, email, tipo, senha, categoria_id) VALUES 

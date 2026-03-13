@@ -163,6 +163,17 @@ $view = isset($_GET['view']) ? $_GET['view'] : 'inicio';
                             <textarea name="descricao" class="form-control" rows="4" placeholder="Explique o que significa com suas palavras..." required></textarea>
                         </div>
 
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Exemplo</label>
+                            <textarea name="exemplo" class="form-control" rows="3" placeholder="Use em uma frase ou contexto." required></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">URL da imagem</label>
+                            <input type="file" name="imagem" accept="image/*" required>
+                            <div class="form-text">Selecione uma imagem relacionada ao termo.</div>
+                        </div>
+
                         <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">
                             <i class="bi bi-send-fill me-2"></i> Enviar para o Professor
                         </button>
@@ -206,9 +217,8 @@ $view = isset($_GET['view']) ? $_GET['view'] : 'inicio';
                 const alerta = document.getElementById('alerta-mensagem');
                 const botao = form.querySelector('button[type="submit"]');
 
-                // Transforma os dados do formulário em JSON
+                // Transforma os dados do formulário em FormData para incluir arquivo
                 const formData = new FormData(form);
-                const dadosObj = Object.fromEntries(formData.entries());
 
                 botao.disabled = true;
                 botao.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
@@ -216,10 +226,7 @@ $view = isset($_GET['view']) ? $_GET['view'] : 'inicio';
                 try {
                     const resposta = await fetch('api/api_adicionar_termo.php', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(dadosObj)
+                        body: formData
                     });
 
                     const resultado = await resposta.json();
