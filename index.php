@@ -158,7 +158,7 @@ $profCategoria = ($usuarioLogado && $usuarioTipo === 'professor') ? $_SESSION['c
 
     <nav class="sidebar bg-white d-flex flex-column p-4">
         <a href="index.php?view=home" class="d-flex align-items-center mb-4 text-decoration-none text-accent fs-4 fw-bold">
-            <i class="bi bi-book-half me-2"></i> Tecna
+            <i class="bi bi-book-half me-2"></i> Dicionário Digital
         </a>
 
         <ul class="nav nav-pills flex-column mb-auto">
