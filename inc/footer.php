@@ -70,7 +70,7 @@
                             <h4 class="card-title fw-bold text-dark mb-3">${termo.palavra}</h4>
                             <p class="card-text text-secondary mb-4 lh-lg">${termo.descricao}</p>
                             ${termo.exemplo ? `<p class="card-text text-secondary mb-3"><strong>Exemplo:</strong> ${termo.exemplo}</p>` : ''}
-                            ${termo.imagem ? `<div class="mb-4"><img src="${termo.imagem}" alt="${termo.palavra}" class="img-fluid rounded" /></div>` : ''}
+                            ${termo.imagem ? `<div class="mb-4"><img src="${termo.imagem}" alt="${termo.palavra}" class="img-fluid rounded termo-thumb" style="max-width: 180px; cursor: pointer;" data-img="${termo.imagem}" data-alt="${termo.palavra}" onclick="mostrarImagemModal(this.dataset.img, this.dataset.alt)" /></div>` : ''}
                             <div class="d-flex align-items-center text-muted small fw-medium">
                                 <div class="avatar-sala rounded-circle d-flex align-items-center justify-content-center me-2">${inicial}</div>
                                 Enviado por ${termo.enviado_por}
@@ -93,7 +93,28 @@
                 timer = setTimeout(() => fn(...args), delay);
             };
         }
+
+        function mostrarImagemModal(src, alt = '') {
+            if (!src) return;
+            const img = document.getElementById('modalImagemImg');
+            if (!img) return;
+            img.src = src;
+            img.alt = alt;
+            const modal = new bootstrap.Modal(document.getElementById('modalImagem'));
+            modal.show();
+        }
     </script>
+
+    <!-- Modal de visualização de imagem -->
+    <div class="modal fade" id="modalImagem" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body p-0">
+                    <img id="modalImagemImg" src="" alt="" class="img-fluid rounded" style="width: 100%; height: auto;" />
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -100,7 +100,7 @@ include __DIR__ . '/inc/header.php';
                                 ${t.exemplo ? `<p class="mb-2 text-secondary"><strong>Exemplo:</strong> ${escapeHtml(t.exemplo)}</p>` : ''}
                                 <div class="text-muted small mb-2">Enviado por ${escapeHtml(t.nome_aluno)}</div>
                                 <p class="mb-3 text-secondary">${escapeHtml(descricaoCurta)}</p>
-                                ${t.imagem ? `<img src="${escapeHtml(t.imagem)}" alt="${escapeHtml(t.palavra)}" class="img-fluid rounded mb-3" />` : ''}
+                                ${t.imagem ? `<img src="${escapeHtml(t.imagem)}" alt="${escapeHtml(t.palavra)}" class="img-fluid rounded mb-3 termo-thumb" style="max-width: 180px; cursor: pointer;" data-img="${escapeAttr(t.imagem)}" data-alt="${escapeAttr(t.palavra)}" onclick="mostrarImagemModal(this.dataset.img, this.dataset.alt)" />` : ''}
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-success btn-aprovar" data-id="${t.id}">Aprovar</button>
                                     <button class="btn btn-outline-danger btn-rejeitar" data-id="${t.id}">Rejeitar</button>
@@ -155,6 +155,49 @@ include __DIR__ . '/inc/header.php';
         // Inicializa
         carregarPendentes();
     })();
+
+    // Script para alunos enviar termo
+    const formAdicionarTermo = document.getElementById('formAdicionarTermo');
+    if (formAdicionarTermo) {
+        formAdicionarTermo.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const alerta = document.getElementById('alerta-mensagem');
+            const botao = formAdicionarTermo.querySelector('button[type="submit"]');
+
+            // Usar FormData para incluir arquivo
+            const formData = new FormData(formAdicionarTermo);
+
+            botao.disabled = true;
+            botao.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+
+            try {
+                const resposta = await fetch('api/api_adicionar_termo.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const resultado = await resposta.json();
+
+                alerta.classList.remove('d-none', 'alert-danger', 'alert-success');
+
+                if (resultado.sucesso) {
+                    alerta.classList.add('alert-success');
+                    alerta.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i> ${resultado.mensagem}`;
+                    formAdicionarTermo.reset(); // Limpa o formulário
+                } else {
+                    alerta.classList.add('alert-danger');
+                    alerta.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i> ${resultado.erro}`;
+                }
+                } catch (erro) {
+                    console.error('Erro ao enviar:', erro);
+                    alerta.classList.remove('d-none');
+                    alerta.classList.add('alert-danger');
+                    alerta.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i> Erro ao conectar com o servidor.`;
+                }            botao.disabled = false;
+            botao.innerHTML = '<i class="bi bi-send-fill me-2"></i> Enviar para o Professor';
+        });
+    }
     </script>
 
-<?php include __DIR__ . '/inc/footer.php'; ?>
+<?php include __DIR__ . '/inc/footer.php'; ?> 

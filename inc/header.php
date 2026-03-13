@@ -93,6 +93,13 @@ function isActive($name) {
                         <i class="bi bi-person-workspace me-2"></i> Aprovar Termos
                     </a>
                 </li>
+                <?php if ($usuarioTipo === 'professor'): ?>
+                <li class="nav-item mb-2">
+                    <a id="menu-termos-aprovados" href="termos_aprovados_professor.php" class="nav-link <?php echo isActive('termos_aprovados_professor.php') ? 'active' : ''; ?>">
+                        <i class="bi bi-check-circle me-2"></i> Termos Aprovados
+                    </a>
+                </li>
+                <?php endif; ?>
             <?php endif; ?>
         </ul>
 

@@ -377,6 +377,51 @@ exit;
             };
         }
 
+        // Script para alunos enviar termo
+        const formAdicionarTermo = document.getElementById('formAdicionarTermo');
+        if (formAdicionarTermo) {
+            formAdicionarTermo.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const alerta = document.getElementById('alerta-mensagem');
+                const botao = formAdicionarTermo.querySelector('button[type="submit"]');
+
+                // Usar FormData para incluir arquivo
+                const formData = new FormData(formAdicionarTermo);
+
+                botao.disabled = true;
+                botao.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+
+                try {
+                    const resposta = await fetch('api/api_adicionar_termo.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const resultado = await resposta.json();
+
+                    alerta.classList.remove('d-none', 'alert-danger', 'alert-success');
+
+                    if (resultado.sucesso) {
+                        alerta.classList.add('alert-success');
+                        alerta.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i> ${resultado.mensagem}`;
+                        formAdicionarTermo.reset(); // Limpa o formulário
+                    } else {
+                        alerta.classList.add('alert-danger');
+                        alerta.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i> ${resultado.erro}`;
+                    }
+                } catch (erro) {
+                    console.error('Erro ao enviar:', erro);
+                    alerta.classList.remove('d-none');
+                    alerta.classList.add('alert-danger');
+                    alerta.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i> Erro ao conectar com o servidor.`;
+                }
+
+                botao.disabled = false;
+                botao.innerHTML = '<i class="bi bi-send-fill me-2"></i> Enviar para o Professor';
+            });
+        }
+
         window.onload = () => {
             const view = getQueryParam('view') || 'home';
 

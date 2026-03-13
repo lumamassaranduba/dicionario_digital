@@ -103,7 +103,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalTermosAprovados">
+                <a href="termos_aprovados_professor.php" class="nav-link">
                     <i class="bi bi-check-circle me-2"></i> Termos Aprovados
                 </a>
             </li>
@@ -179,40 +179,6 @@
                         <div class="mb-3">
                             <label class="form-label">Senha</label>
                             <input type="text" class="form-control" id="editar-turma-senha" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Editar Termo -->
-    <div class="modal fade" id="modalEditarTermo" tabindex="-1" aria-labelledby="modalEditarTermoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalEditarTermoLabel">Editar Termo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formEditarTermo">
-                        <input type="hidden" id="editar-termo-id">
-                        <div class="mb-3">
-                            <label class="form-label">Palavra</label>
-                            <input type="text" class="form-control" id="editar-termo-palavra" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Descrição</label>
-                            <textarea class="form-control" id="editar-termo-descricao" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Exemplo</label>
-                            <textarea class="form-control" id="editar-termo-exemplo" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Imagem</label>
-                            <input type="file" class="form-control" id="editar-termo-imagem" accept="image/*">
                         </div>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
@@ -335,62 +301,11 @@
             }
         }
 
-        // Função para carregar termos aprovados
-        async function carregarTermosAprovados() {
-            const div = document.getElementById('lista-termos-aprovados');
-            div.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>';
-            try {
-                const resp = await fetch('api/api_termos_aprovados.php');
-                const termos = await resp.json();
-                let html = '<table class="table"><thead><tr><th>Palavra</th><th>Descrição</th><th>Ações</th></tr></thead><tbody>';
-                termos.forEach(t => {
-                    html += `<tr><td>${t.palavra}</td><td>${t.descricao.substring(0,50)}...</td><td><button class="btn btn-sm btn-warning" onclick="editarTermo(${t.id})">Editar</button> <button class="btn btn-sm btn-danger" onclick="excluirTermo(${t.id})">Excluir</button></td></tr>`;
-                });
-                html += '</tbody></table>';
-                div.innerHTML = html;
-            } catch (err) {
-                div.innerHTML = '<div class="alert alert-danger">Erro ao carregar termos.</div>';
-            }
-        }
-
-        // Função para editar turma
-        function editarTurma(id) {
-            // Placeholder: abrir modal com dados
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarTurma'));
-            document.getElementById('editar-turma-id').value = id;
-            // Carregar dados da turma
-            modal.show();
-        }
-
-        // Função para excluir turma
-        function excluirTurma(id) {
-            if (confirm('Excluir turma?')) {
-                // Implementar exclusão
-            }
-        }
-
-        // Função para editar termo
-        function editarTermo(id) {
-            // Placeholder: abrir modal com dados
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarTermo'));
-            document.getElementById('editar-termo-id').value = id;
-            // Carregar dados do termo
-            modal.show();
-        }
-
-        // Função para excluir termo
-        function excluirTermo(id) {
-            if (confirm('Excluir termo?')) {
-                // Implementar exclusão
-            }
-        }
-
         // Carrega a lista assim que a página abre
         window.onload = carregarPendentes;
 
         // Carregar turmas no modal
         document.getElementById('modalTurmas').addEventListener('show.bs.modal', carregarTurmas);
-        document.getElementById('modalTermosAprovados').addEventListener('show.bs.modal', carregarTermosAprovados);
     </script>
 </body>
 

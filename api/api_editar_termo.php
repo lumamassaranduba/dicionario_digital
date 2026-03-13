@@ -2,6 +2,7 @@
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Origin: *");
 require_once '../bd/bd.php';
 
 // Apenas professores
@@ -10,32 +11,49 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'professor') {
     exit;
 }
 
-$dados = json_decode(file_get_contents('php://input'));
-if (empty($dados->id) || empty($dados->palavra) || empty($dados->descricao) || empty($dados->categoria_id) || empty($dados->exemplo) || empty($dados->imagem)) {
+if (!isset($_POST['id']) || !isset($_POST['palavra']) || !isset($_POST['descricao']) || !isset($_POST['categoria_id']) || !isset($_POST['exemplo'])) {
     echo json_encode(["sucesso" => false, "erro" => "Dados incompletos."]);
     exit;
 }
 
-$id = intval($dados->id);
-$palavra = trim($dados->palavra);
-$descricao = trim($dados->descricao);
-$categoria_id = intval($dados->categoria_id);
- $exemplo = trim($dados->exemplo);
- $imagem = trim($dados->imagem);
+$id = intval($_POST['id']);
+$palavra = trim($_POST['palavra']);
+$descricao = trim($_POST['descricao']);
+$exemplo = trim($_POST['exemplo']);
+$categoria_id = intval($_POST['categoria_id']);
 
-if ($palavra === '' || $descricao === '') {
-    echo json_encode(["sucesso" => false, "erro" => "Palavra e descrição não podem ser vazias."]);
+if ($palavra === '' || $descricao === '' || $exemplo === '') {
+    echo json_encode(["sucesso" => false, "erro" => "Palavra, descrição e exemplo não podem ser vazios."]);
     exit;
 }
 
-$sql = "UPDATE termos SET palavra = ?, descricao = ?, exemplo = ?, imagem = ?, categoria_id = ? WHERE id = ?";
+// Lidar com upload de imagem opcional
+$imagemUpdate = '';
+if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+    $uploadDir = '../uploads/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+    $fileName = uniqid() . '_' . basename($_FILES['imagem']['name']);
+    $uploadFile = $uploadDir . $fileName;
+    if (move_uploaded_file($_FILES['imagem']['tmp_name'], $uploadFile)) {
+        $imagemUpdate = ", imagem = 'uploads/$fileName'";
+    } else {
+        echo json_encode(["sucesso" => false, "erro" => "Erro ao salvar nova imagem."]);
+        exit;
+    }
+}
+
+$sql = "UPDATE termos SET palavra = ?, descricao = ?, exemplo = ?, categoria_id = ? $imagemUpdate WHERE id = ?";
 $stmt = $conexao->prepare($sql);
 if ($stmt) {
-    $stmt->bind_param('sssisi', $palavra, $descricao, $exemplo, $imagem, $categoria_id, $id);
+    if ($imagemUpdate) {
+        $stmt->bind_param('sssii', $palavra, $descricao, $exemplo, $categoria_id, $id);
+    } else {
+        $stmt->bind_param('sssii', $palavra, $descricao, $exemplo, $categoria_id, $id);
+    }
     if ($stmt->execute()) {
         echo json_encode(["sucesso" => true, "mensagem" => "Termo atualizado."]);
     } else {
-        echo json_encode(["sucesso" => false, "erro" => "Erro ao atualizar no banco." ]);
+        echo json_encode(["sucesso" => false, "erro" => "Erro ao atualizar no banco."]);
     }
     $stmt->close();
 } else {

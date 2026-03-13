@@ -242,6 +242,7 @@ $view = isset($_GET['view']) ? $_GET['view'] : 'inicio';
                         alerta.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i> ${resultado.erro}`;
                     }
                 } catch (erro) {
+                    console.error('Erro ao enviar:', erro);
                     alerta.classList.remove('d-none');
                     alerta.classList.add('alert-danger');
                     alerta.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i> Erro ao conectar com o servidor.`;
