@@ -1,42 +1,8 @@
 <?php
-// Mantemos sessão para saber se o usuário está logado e qual tipo ele é.
-session_start();
-
-$view = isset($_GET['view']) ? $_GET['view'] : 'home';
-$validViews = ['home', 'termos', 'painel'];
-if (!in_array($view, $validViews, true)) {
-    $view = 'home';
-}
-
-$categoriaId = isset($_GET['categoria']) ? intval($_GET['categoria']) : 1;
-if (!in_array($categoriaId, [1, 2], true)) {
-    $categoriaId = 1;
-}
-
-$usuarioLogado = isset($_SESSION['usuario_id']);
-$usuarioTipo = $usuarioLogado ? $_SESSION['tipo'] : null;
-$usuarioNome = $usuarioLogado ? $_SESSION['nome'] : null;
-$profCategoria = ($usuarioLogado && $usuarioTipo === 'professor') ? $_SESSION['categoria_id'] : null;
+// Redireciona para a página inicial separada.
+header('Location: home.php');
+exit;
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dicionário Técnico SENAI</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    <style>
-        :root {
-            --accent: #0d6efd;
-            --accent-fade: rgba(13, 110, 253, 0.1);
-            --sombra-leve: 0 4px 6px -1px rgba(13, 110, 253, 0.08), 0 2px 4px -1px rgba(13, 110, 253, 0.04);
-            --sombra-forte: 0 20px 25px -5px rgba(13, 110, 253, 0.15), 0 10px 10px -5px rgba(13, 110, 253, 0.08);
-        }
 
         /* classes utilitárias para ajudar a aplicar a cor atual (accent) */
         .text-accent {
