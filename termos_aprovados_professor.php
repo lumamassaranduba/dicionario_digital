@@ -10,15 +10,15 @@ $bodyClass = '';
 include __DIR__ . '/inc/header.php';
 ?>
 
-    <header class="p-4 d-flex align-items-center">
-        <div class="search-wrapper">
+    <header class="p-4 d-flex align-items-center justify-content-between w-100" style="max-width: 1000px; margin: 0 auto;">
+        <div class="search-wrapper" style="max-width: 600px; width: 100%;">
             <i class="bi bi-search search-icon"></i>
-            <input id="search-input" type="text" class="form-control form-control-lg search-bar fs-6" placeholder="Busque por termos...">
+            <input id="search-input" type="text" class="form-control form-control-lg search-bar fs-6" placeholder="Busque por termos aprovados...">
         </div>
     </header>
 
     <section class="p-4 p-md-5 pt-0 w-100" style="max-width: 1000px; margin: 0 auto;">
-        <h2 class="fw-bold text-accent mb-4">Termos Aprovados</h2>
+        <h2 class="fw-bold text-accent mb-2">Termos Aprovados</h2>
         <p class="text-muted mb-4">Gerencie termos já aprovados: edite ou exclua.</p>
         <div id="area-edicao" class="mb-4 d-none">
             <div class="card bg-white p-4 shadow-sm rounded-4">
