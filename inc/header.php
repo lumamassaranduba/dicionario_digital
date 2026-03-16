@@ -99,6 +99,11 @@ function isActive($name) {
                         <i class="bi bi-check-circle me-2"></i> Termos Aprovados
                     </a>
                 </li>
+                <li class="nav-item mb-2">
+                    <a id="menu-termos-rejeitados" href="termos_rejeitados_professor.php" class="nav-link <?php echo isActive('termos_rejeitados_professor.php') ? 'active' : ''; ?>">
+                        <i class="bi bi-x-circle me-2"></i> Termos Rejeitados
+                    </a>
+                </li>
                 <?php endif; ?>
             <?php endif; ?>
         </ul>
