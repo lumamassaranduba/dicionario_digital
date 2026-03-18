@@ -3,12 +3,14 @@ $bodyClass = '';
 include __DIR__ . '/inc/header.php';
 ?>
 
-    <header class="p-4">
-        <h1 class="h3 fw-bold text-accent mb-1">Meu Painel</h1>
-        <p class="text-muted mb-0">Use esta área para enviar ou aprovar termos.</p>
+    <header class="p-4 d-flex align-items-center justify-content-between w-100" style="max-width: 1000px; margin: 0 auto;">
+        <div>
+            <h1 class="h3 fw-bold text-accent mb-1">Meu Painel</h1>
+            <p class="text-muted mb-0">Use esta área para enviar ou aprovar termos.</p>
+        </div>
     </header>
 
-    <section class="p-4 p-md-5 pt-0 w-100" style="max-width: 900px; margin: 0 auto;">
+    <section class="p-4 p-md-5 pt-0 w-100" style="max-width: 1000px; margin: 0 auto;">
         <?php if (! isset($_SESSION['usuario_id'])): ?>
             <div class="alert alert-warning">Faça login para acessar o painel.</div>
         <?php elseif ($_SESSION['tipo'] === 'aluno'): ?>

@@ -7,15 +7,15 @@ include __DIR__ . '/inc/header.php';
 $nome = $categoriaId === 2 ? 'Matemática' : 'Português';
 ?>
 
-    <header class="p-4 d-flex align-items-center">
-        <div class="search-wrapper">
+    <header class="p-4 d-flex align-items-center justify-content-center w-100" style="max-width: 1000px; margin: 0 auto;">
+        <div class="search-wrapper" style="max-width: 600px; width: 100%;">
             <i class="bi bi-search search-icon"></i>
             <input id="search-input" type="text" class="form-control form-control-lg search-bar fs-6" placeholder="Busque por termos, conceitos ou palavras-chave...">
         </div>
     </header>
 
-    <section class="p-4 p-md-5 pt-0 w-100" style="max-width: 900px; margin: 0 auto;">
-        <h2 class="fw-bold text-accent mb-4" id="titulo-categoria"><?php echo htmlspecialchars($nome); ?></h2>
+    <section class="p-4 p-md-5 pt-0 w-100" style="max-width: 1000px; margin: 0 auto;">
+        <h2 class="fw-bold text-accent mb-2" id="titulo-categoria"><?php echo htmlspecialchars($nome); ?></h2>
 
         <div id="lista-termos">
             <div class="text-center text-muted mt-5">
