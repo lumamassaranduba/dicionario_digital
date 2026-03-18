@@ -1,25 +1,33 @@
 <?php
+session_start();
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Origin: *");
 require_once '../bd/bd.php';
-session_start();
+
+// Proteção extra: Só alunos ou professores podem enviar termos
+if (!isset($_SESSION['usuario_id']) || !in_array($_SESSION['tipo'], ['aluno', 'professor'])) {
+    echo json_encode(["sucesso" => false, "erro" => "Acesso negado."]);
+    exit;
+}
 
 try {
     // Log para debug
     file_put_contents('../debug.log', date('Y-m-d H:i:s') . " - Iniciando API\n", FILE_APPEND);
 
     // Pega os dados do formulário multipart
-    if (!empty($_POST['palavra']) && !empty($_POST['descricao']) && !empty($_POST['categoria_id']) && !empty($_POST['exemplo']) && !empty($_POST['sala_id'])) {
+    if (!empty($_POST['palavra']) && !empty($_POST['descricao']) && !empty($_POST['categoria_id']) && !empty($_POST['exemplo'])) {
         file_put_contents('../debug.log', "Campos preenchidos: " . $_POST['palavra'] . "\n", FILE_APPEND);
+        file_put_contents('../debug.log', "Categoria: " . $_POST['categoria_id'] . ", Usuario: " . $_SESSION['usuario_id'] . "\n", FILE_APPEND);
 
         $palavra = trim($_POST['palavra']);
         $descricao = trim($_POST['descricao']);
         $exemplo = trim($_POST['exemplo']);
         $categoria_id = intval($_POST['categoria_id']);
-        $sala_id = intval($_POST['sala_id']);
+        $usuario_id = $_SESSION['usuario_id'];
+        // Sempre criar como pendente para que o termo vá para a fila de aprovação,
+        // mesmo que quem esteja criando seja professor.
         $status = 'pendente';
-        $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : NULL;
 
         // Lidar com upload de imagem
         $imagem = '';
@@ -42,11 +50,11 @@ try {
 
         // Prepara a inserção no banco
         file_put_contents('../debug.log', "Preparando SQL\n", FILE_APPEND);
-        $sql = "INSERT INTO termos (palavra, descricao, exemplo, imagem, status, categoria_id, sala_id, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
+        $sql = "INSERT INTO termos (palavra, descricao, exemplo, imagem, status, categoria_id, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conexao->prepare($sql);
 
         if ($stmt) {
-            $stmt->bind_param("sssssiis", $palavra, $descricao, $exemplo, $imagem, $status, $categoria_id, $sala_id, $usuario_id);
+            $stmt->bind_param("sssssii", $palavra, $descricao, $exemplo, $imagem, $status, $categoria_id, $usuario_id);
 
             if ($stmt->execute()) {
                 file_put_contents('../debug.log', "Inserido com sucesso\n", FILE_APPEND);
@@ -57,7 +65,7 @@ try {
             }
             $stmt->close();
         } else {
-            file_put_contents('../debug.log', "Erro prepare: " . $conn->error . "\n", FILE_APPEND);
+            file_put_contents('../debug.log', "Erro prepare: " . $conexao->error . "\n", FILE_APPEND);
             echo json_encode(["sucesso" => false, "erro" => "Erro interno no servidor."]);
         }
     } else {
@@ -69,5 +77,5 @@ try {
     echo json_encode(["sucesso" => false, "erro" => "Erro interno: " . $e->getMessage()]);
 }
 
-$conn->close();
+$conexao->close();
 ?>

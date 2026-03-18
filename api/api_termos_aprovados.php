@@ -9,9 +9,9 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'professor') {
     exit;
 }
 
-$sql = "SELECT t.id, t.palavra, t.descricao, t.exemplo, t.imagem, t.categoria_id, c.nome AS categoria, s.nome AS enviado_por
+$sql = "SELECT t.id, t.palavra, t.descricao, t.exemplo, t.imagem, t.categoria_id, c.nome AS categoria, u.nome AS enviado_por
         FROM termos t
-        JOIN salas s ON t.sala_id = s.id
+        JOIN usuarios u ON t.usuario_id = u.id
         LEFT JOIN categorias c ON t.categoria_id = c.id
         WHERE t.status = 'aprovado'
         ORDER BY t.palavra ASC";

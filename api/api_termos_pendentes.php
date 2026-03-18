@@ -20,10 +20,10 @@ if ($categoria_id === 0 && isset($_GET['categoria_id'])) {
 file_put_contents('../debug.log', date('Y-m-d H:i:s') . " - api_termos_pendentes.php: categoria_id(session) = " . ($_SESSION['categoria_id'] ?? 'null') . ", categoria_id(usa) = $categoria_id\n", FILE_APPEND);
 
 // Busca apenas termos 'pendentes' daquela categoria
-$sql = "SELECT t.id, t.palavra, t.descricao, s.nome AS nome_sala 
-    , t.exemplo, t.imagem, t.usuario_id
+$sql = "SELECT t.id, t.palavra, t.descricao, u.nome AS nome_aluno 
+    , t.exemplo, t.imagem
         FROM termos t
-        JOIN salas s ON t.sala_id = s.id
+        JOIN usuarios u ON t.usuario_id = u.id
         WHERE t.categoria_id = ? AND t.status = 'pendente'
         ORDER BY t.id DESC";
 
