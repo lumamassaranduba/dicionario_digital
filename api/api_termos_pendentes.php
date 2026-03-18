@@ -9,23 +9,36 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'professor') {
     exit;
 }
 
-// Pega o ID da categoria que o Javascript enviou pela URL
-$categoria_id = isset($_GET['categoria_id']) ? intval($_GET['categoria_id']) : 0;
+// Usa a categoria vinculada ao professor logado (segurança extra)
+$categoria_id = isset($_SESSION['categoria_id']) ? intval($_SESSION['categoria_id']) : 0;
+
+// Se por algum motivo não existir categoria na sessão, tenta puxar da URL como fallback
+if ($categoria_id === 0 && isset($_GET['categoria_id'])) {
+    $categoria_id = intval($_GET['categoria_id']);
+}
+
+file_put_contents('../debug.log', date('Y-m-d H:i:s') . " - api_termos_pendentes.php: categoria_id(session) = " . ($_SESSION['categoria_id'] ?? 'null') . ", categoria_id(usa) = $categoria_id\n", FILE_APPEND);
 
 // Busca apenas termos 'pendentes' daquela categoria
 $sql = "SELECT t.id, t.palavra, t.descricao, u.nome AS nome_aluno 
     , t.exemplo, t.imagem
         FROM termos t
         JOIN usuarios u ON t.usuario_id = u.id
-        WHERE t.categoria_id = $categoria_id AND t.status = 'pendente'";
+        WHERE t.categoria_id = ? AND t.status = 'pendente'
+        ORDER BY t.id DESC";
 
-$resultado = $conexao->query($sql);
+$stmt = $conexao->prepare($sql);
 $termos = array();
 
-if ($resultado && $resultado->num_rows > 0) {
+if ($stmt) {
+    $stmt->bind_param("i", $categoria_id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
     while ($linha = $resultado->fetch_assoc()) {
         $termos[] = $linha;
     }
+    $stmt->close();
+    file_put_contents('../debug.log', "Encontrados " . count($termos) . " termos\n", FILE_APPEND);
 }
 
 echo json_encode($termos);

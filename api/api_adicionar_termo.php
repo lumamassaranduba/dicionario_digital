@@ -5,8 +5,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Origin: *");
 require_once '../bd/bd.php';
 
-// Proteção extra: Só alunos podem enviar termos
-if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'aluno') {
+// Proteção extra: Só alunos ou professores podem enviar termos
+if (!isset($_SESSION['usuario_id']) || !in_array($_SESSION['tipo'], ['aluno', 'professor'])) {
     echo json_encode(["sucesso" => false, "erro" => "Acesso negado."]);
     exit;
 }
@@ -18,12 +18,15 @@ try {
     // Pega os dados do formulário multipart
     if (!empty($_POST['palavra']) && !empty($_POST['descricao']) && !empty($_POST['categoria_id']) && !empty($_POST['exemplo'])) {
         file_put_contents('../debug.log', "Campos preenchidos: " . $_POST['palavra'] . "\n", FILE_APPEND);
+        file_put_contents('../debug.log', "Categoria: " . $_POST['categoria_id'] . ", Usuario: " . $_SESSION['usuario_id'] . "\n", FILE_APPEND);
 
         $palavra = trim($_POST['palavra']);
         $descricao = trim($_POST['descricao']);
         $exemplo = trim($_POST['exemplo']);
         $categoria_id = intval($_POST['categoria_id']);
         $usuario_id = $_SESSION['usuario_id'];
+        // Sempre criar como pendente para que o termo vá para a fila de aprovação,
+        // mesmo que quem esteja criando seja professor.
         $status = 'pendente';
 
         // Lidar com upload de imagem

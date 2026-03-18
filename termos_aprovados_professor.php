@@ -10,7 +10,7 @@ $bodyClass = '';
 include __DIR__ . '/inc/header.php';
 ?>
 
-    <header class="p-4 d-flex align-items-center justify-content-between w-100" style="max-width: 1000px; margin: 0 auto;">
+    <header class="p-4 d-flex align-items-center w-100" style="max-width: 1000px; margin: 0 auto;">
         <div class="search-wrapper" style="max-width: 600px; width: 100%;">
             <i class="bi bi-search search-icon"></i>
             <input id="search-input" type="text" class="form-control form-control-lg search-bar fs-6" placeholder="Busque por termos aprovados...">
@@ -65,9 +65,11 @@ include __DIR__ . '/inc/header.php';
         let termosOriginais = [];
 
         async function carregarCategorias() {
-            // Hardcode categories based on DB (Português=1, Matemática=2)
+            // Hardcode categories based on DB (Português=1, Matemática=2), but only allow professor's category
+            const categoriaProf = <?php echo intval($_SESSION['categoria_id'] ?? 1); ?>;
             const sel = document.getElementById('editar-categoria');
-            sel.innerHTML = '<option value="1">Português</option><option value="2">Matemática</option>';
+            const nomeCat = categoriaProf === 1 ? 'Português' : 'Matemática';
+            sel.innerHTML = `<option value="${categoriaProf}">${nomeCat}</option>`;
         }
 
         async function carregarAprovados() {
@@ -108,7 +110,7 @@ include __DIR__ . '/inc/header.php';
                                 </div>
                                 <div class="ms-3 text-end">
                                     <button class="btn btn-sm btn-outline-primary btn-editar" data-id="${t.id}" data-palavra="${escapeAttr(t.palavra)}" data-descricao="${escapeAttr(t.descricao)}" data-exemplo="${escapeAttr(t.exemplo)}" data-imagem="${escapeAttr(t.imagem)}" data-categoria="${t.categoria_id}">Editar</button>
-                                    <button class="btn btn-sm btn-danger btn-deletar" data-id="${t.id}">Excluir</button>
+                                    <button class="btn btn-sm btn-warning btn-rejeitar" data-id="${t.id}">Rejeitar</button>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +121,7 @@ include __DIR__ . '/inc/header.php';
             div.innerHTML = html;
 
             document.querySelectorAll('.btn-editar').forEach(b => b.addEventListener('click', abrirEdicao));
-            document.querySelectorAll('.btn-deletar').forEach(b => b.addEventListener('click', deletarTermo));
+            document.querySelectorAll('.btn-rejeitar').forEach(b => b.addEventListener('click', rejeitarTermo));
         }
 
         function escapeHtml(str) {
@@ -193,19 +195,19 @@ include __DIR__ . '/inc/header.php';
             }
         });
 
-        async function deletarTermo(e) {
+        async function rejeitarTermo(e) {
             const id = e.currentTarget.getAttribute('data-id');
-            if (!confirm('Tem certeza que deseja excluir este termo? Esta ação não pode ser desfeita.')) return;
+            if (!confirm('Tem certeza que deseja rejeitar este termo? Ele será movido para termos rejeitados.')) return;
             try {
-                const resp = await fetch('api/api_deletar_termo.php', {
+                const resp = await fetch('api/api_atualizar_termo.php', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: id })
+                    body: JSON.stringify({ id: id, status: 'rejeitado' })
                 });
                 const resultado = await resp.json();
                 if (resultado.sucesso) {
                     await carregarAprovados();
                 } else {
-                    alert(resultado.erro || 'Erro ao excluir.');
+                    alert(resultado.erro || 'Erro ao rejeitar.');
                 }
             } catch (err) {
                 console.error(err);

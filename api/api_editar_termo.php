@@ -42,13 +42,14 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     }
 }
 
-$sql = "UPDATE termos SET palavra = ?, descricao = ?, exemplo = ?, categoria_id = ? $imagemUpdate WHERE id = ?";
+$sql = "UPDATE termos SET palavra = ?, descricao = ?, exemplo = ?, categoria_id = ? $imagemUpdate WHERE id = ? AND categoria_id = ?";
 $stmt = $conexao->prepare($sql);
 if ($stmt) {
+    $categoria_professor = $_SESSION['categoria_id'];
     if ($imagemUpdate) {
-        $stmt->bind_param('sssii', $palavra, $descricao, $exemplo, $categoria_id, $id);
+        $stmt->bind_param('sssiis', $palavra, $descricao, $exemplo, $categoria_id, $id, $categoria_professor);
     } else {
-        $stmt->bind_param('sssii', $palavra, $descricao, $exemplo, $categoria_id, $id);
+        $stmt->bind_param('sssiii', $palavra, $descricao, $exemplo, $categoria_id, $id, $categoria_professor);
     }
     if ($stmt->execute()) {
         echo json_encode(["sucesso" => true, "mensagem" => "Termo atualizado."]);

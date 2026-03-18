@@ -24,11 +24,12 @@ if (!empty($dados->id) && !empty($dados->status)) {
     }
 
     // Atualiza o banco de dados usando prepared statements (segurança máxima)
-    $sql = "UPDATE termos SET status = ? WHERE id = ?";
+    $categoria_professor = $_SESSION['categoria_id'];
+    $sql = "UPDATE termos SET status = ? WHERE id = ? AND categoria_id = ?";
     $stmt = $conexao->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("si", $status, $id);
+        $stmt->bind_param("sii", $status, $id, $categoria_professor);
         if ($stmt->execute()) {
             echo json_encode(["sucesso" => true, "mensagem" => "Status atualizado!"]);
         } else {

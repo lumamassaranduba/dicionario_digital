@@ -18,10 +18,12 @@ if (empty($dados->id)) {
 
 $id = intval($dados->id);
 
-$sql = "DELETE FROM termos WHERE id = ?";
+$categoria_professor = $_SESSION['categoria_id'];
+
+$sql = "DELETE FROM termos WHERE id = ? AND categoria_id = ?";
 $stmt = $conexao->prepare($sql);
 if ($stmt) {
-    $stmt->bind_param('i', $id);
+    $stmt->bind_param('ii', $id, $categoria_professor);
     if ($stmt->execute()) {
         echo json_encode(["sucesso" => true, "mensagem" => "Termo excluído."]);
     } else {

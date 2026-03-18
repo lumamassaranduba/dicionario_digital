@@ -77,26 +77,7 @@ function isActive($name) {
         .dark-mode .nav-link.active { background-color: #2f80ff !important; color: #fff !important; }
         .dark-mode .btn-outline-primary { border-color: #4f7fe4; color: #4f7fe4; }
     </style>
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const modo = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-            localStorage.setItem('modoTema', modo);
-            document.getElementById('btn-dark-mode').innerHTML = modo === 'dark' ? '<i class="bi bi-sun-fill"></i> Claro' : '<i class="bi bi-moon-fill"></i> Escuro';
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            const modoSalvo = localStorage.getItem('modoTema');
-            if (modoSalvo === 'dark') {
-                document.body.classList.add('dark-mode');
-            }
-            const btn = document.getElementById('btn-dark-mode');
-            if (btn) {
-                const modo = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-                btn.innerHTML = modo === 'dark' ? '<i class="bi bi-sun-fill"></i> Claro' : '<i class="bi bi-moon-fill"></i> Escuro';
-                btn.addEventListener('click', toggleDarkMode);
-            }
-        });
-    </script>
+        <!-- Tema claro fixo (modo escuro removido) -->
 </head>
 
 <body class="d-flex flex-column flex-md-row <?php echo htmlspecialchars($bodyClass); ?>">
@@ -124,9 +105,16 @@ function isActive($name) {
                 </a>
             </li>
             <?php if ($usuarioLogado): ?>
+                <?php if ($usuarioTipo === 'professor'): ?>
                 <li class="nav-item mb-2">
-                    <a id="menu-painel" href="painel.php" class="nav-link <?php echo isActive('painel.php') ? 'active' : ''; ?>">
+                    <a id="menu-painel" href="painel.php" class="nav-link <?php echo isActive('painel.php') && !isset($_GET['criar']) ? 'active' : ''; ?>">
                         <i class="bi bi-person-workspace me-2"></i> Aprovar Termos
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li class="nav-item mb-2">
+                    <a id="menu-criar-termo" href="painel.php?criar=1" class="nav-link <?php echo isActive('painel.php') && isset($_GET['criar']) ? 'active' : ''; ?>">
+                        <i class="bi bi-plus-circle me-2"></i> Criar Termo
                     </a>
                 </li>
                 <?php if ($usuarioTipo === 'professor'): ?>
@@ -140,6 +128,11 @@ function isActive($name) {
                         <i class="bi bi-x-circle me-2"></i> Termos Rejeitados
                     </a>
                 </li>
+                <li class="nav-item mb-2">
+                    <a id="menu-perfil" href="perfil.php" class="nav-link <?php echo isActive('perfil.php') ? 'active' : ''; ?>">
+                        <i class="bi bi-person-fill-gear me-2"></i> Minha Conta
+                    </a>
+                </li>
                 <?php endif; ?>
             <?php endif; ?>
         </ul>
@@ -148,9 +141,6 @@ function isActive($name) {
 
         <div class="mt-auto">
             <?php if ($usuarioLogado): ?>
-                <div class="d-grid gap-2 mb-2">
-                    <button id="btn-dark-mode" class="btn btn-outline-secondary btn-sm" type="button"></button>
-                </div>
                 <div class="mb-3 text-muted small">
                     Logado como:<br>
                     <strong class="text-dark"><?php echo htmlspecialchars($usuarioNome); ?></strong>

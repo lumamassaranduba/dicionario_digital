@@ -41,8 +41,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // LOGIN APROVADO! Guarda as informações na Sessão do PHP
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['nome']       = $usuario['nome'];
+                $_SESSION['email']      = $usuario['email'];
                 $_SESSION['tipo']       = $usuario['tipo']; // 'aluno' ou 'professor'
-                $_SESSION['categoria_id'] = $usuario['categoria_id']; // Guarda a matéria do professor!
+
+                // Para professores, categoria_id direto
+                // Para alunos, buscar da turma
+                if ($usuario['tipo'] === 'professor') {
+                    $_SESSION['categoria_id'] = $usuario['categoria_id'];
+                } else {
+                    // Buscar categoria da turma
+                    $sql_turma = "SELECT categoria_id FROM turmas WHERE email = ?";
+                    $stmt_turma = $conexao->prepare($sql_turma);
+                    if ($stmt_turma) {
+                        $stmt_turma->bind_param("s", $usuario['email']);
+                        $stmt_turma->execute();
+                        $res_turma = $stmt_turma->get_result();
+                        if ($res_turma->num_rows > 0) {
+                            $turma = $res_turma->fetch_assoc();
+                            $_SESSION['categoria_id'] = $turma['categoria_id'];
+                        } else {
+                            $_SESSION['categoria_id'] = 1; // default
+                        }
+                        $stmt_turma->close();
+                    } else {
+                        $_SESSION['categoria_id'] = 1; // default
+                    }
+                }
 
                 // ==========================================
                 // DIRECIONA TODOS PARA A PÁGINA PRINCIPAL (index.php)
