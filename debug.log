@@ -196,3 +196,41 @@ Inserido com sucesso
 Encontrados 3 termos
 2026-03-18 13:03:42 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
 Encontrados 2 termos
+2026-03-18 13:17:02 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 0 termos
+2026-03-18 13:17:39 - Iniciando API
+Campos preenchidos: gustavo
+Categoria: 1, Usuario: 1
+Imagem não enviada ou erro: 4
+Preparando SQL
+Inserido com sucesso
+2026-03-18 13:17:41 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 1 termos
+2026-03-18 13:17:47 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 0 termos
+2026-03-18 14:01:32 - Iniciando API
+Campos preenchidos: teste2
+Categoria: 1, Usuario: 3
+Imagem salva: uploads/69baa22c4dd9e_image.png
+Preparando SQL
+Inserido com sucesso
+2026-03-18 14:01:47 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 1 termos
+2026-03-18 14:01:55 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 0 termos
+2026-03-18 14:02:24 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 0 termos
+2026-03-18 14:15:43 - Iniciando API
+Campos preenchidos: nilo
+Categoria: 2, Usuario: 3
+Imagem salva: uploads/69baa57f69176_logomarca_ciclo+.png
+Preparando SQL
+Inserido com sucesso
+2026-03-18 14:16:51 - api_termos_pendentes.php: categoria_id(session) = 2, categoria_id(usa) = 2
+Encontrados 2 termos
+2026-03-18 14:17:03 - api_termos_pendentes.php: categoria_id(session) = 2, categoria_id(usa) = 2
+Encontrados 2 termos
+2026-03-18 14:17:06 - api_termos_pendentes.php: categoria_id(session) = 2, categoria_id(usa) = 2
+Encontrados 1 termos
+2026-03-18 14:25:19 - api_termos_pendentes.php: categoria_id(session) = 1, categoria_id(usa) = 1
+Encontrados 0 termos
