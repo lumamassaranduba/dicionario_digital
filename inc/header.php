@@ -104,19 +104,19 @@ function isActive($name) {
                     <i class="bi bi-calculator me-2"></i> Matemática
                 </a>
             </li>
+            <li class="nav-item mb-2">
+                <a id="menu-registrar-termo" href="registrar_termo.php" class="nav-link <?php echo isActive('registrar_termo.php') ? 'active' : ''; ?>">
+                    <i class="bi bi-plus-circle me-2"></i> Registrar Termo
+                </a>
+            </li>
             <?php if ($usuarioLogado): ?>
                 <?php if ($usuarioTipo === 'professor'): ?>
                 <li class="nav-item mb-2">
-                    <a id="menu-painel" href="painel.php" class="nav-link <?php echo isActive('painel.php') && !isset($_GET['criar']) ? 'active' : ''; ?>">
+                    <a id="menu-painel" href="painel.php" class="nav-link <?php echo isActive('painel.php') ? 'active' : ''; ?>">
                         <i class="bi bi-person-workspace me-2"></i> Aprovar Termos
                     </a>
                 </li>
                 <?php endif; ?>
-                <li class="nav-item mb-2">
-                    <a id="menu-criar-termo" href="painel.php?criar=1" class="nav-link <?php echo isActive('painel.php') && isset($_GET['criar']) ? 'active' : ''; ?>">
-                        <i class="bi bi-plus-circle me-2"></i> Criar Termo
-                    </a>
-                </li>
                 <?php if ($usuarioTipo === 'professor'): ?>
                 <li class="nav-item mb-2">
                     <a id="menu-termos-aprovados" href="termos_aprovados_professor.php" class="nav-link <?php echo isActive('termos_aprovados_professor.php') ? 'active' : ''; ?>">

@@ -45,7 +45,30 @@ include __DIR__ . '/inc/header.php';
             </form>
         </div>
 
-        
+        <div class="mt-5">
+            <h2 class="fw-bold text-dark mb-2">Gerenciar Salas</h2>
+            <p class="text-muted mb-4">Adicione novas salas para sua categoria.</p>
+            <div class="card bg-white p-4 shadow-sm rounded-4">
+                <div id="alerta-sala" class="alert d-none" role="alert"></div>
+                <form id="formCriarSala">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Nome da Sala</label>
+                            <input type="text" name="nome" class="form-control" placeholder="Ex: Sala 3A" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Categoria</label>
+                            <select name="categoria_id" class="form-select" required>
+                                <option value="<?php echo $_SESSION['categoria_id']; ?>"><?php echo $_SESSION['categoria_id'] == 1 ? 'Português' : 'Matemática'; ?></option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle me-2"></i> Criar Sala
+                    </button>
+                </form>
+            </div>
+        </div>
     </section>
 
     <script>
@@ -103,6 +126,37 @@ include __DIR__ . '/inc/header.php';
                 alerta.className = 'alert alert-danger';
                 alerta.innerText = 'Erro ao conectar com o servidor.';
             }
+        });
+
+        document.getElementById('formCriarSala').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const alerta = document.getElementById('alerta-sala');
+            const botao = this.querySelector('button[type="submit"]');
+
+            const formData = new FormData(this);
+            botao.disabled = true;
+            botao.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Criando...';
+
+            try {
+                const resp = await fetch('api/api_criar_sala.php', { method: 'POST', body: formData });
+                const result = await resp.json();
+                alerta.classList.remove('d-none', 'alert-danger', 'alert-success');
+                if (result.sucesso) {
+                    alerta.classList.add('alert-success');
+                    alerta.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i> ${result.mensagem}`;
+                    this.reset();
+                } else {
+                    alerta.classList.add('alert-danger');
+                    alerta.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i> ${result.erro}`;
+                }
+            } catch (err) {
+                console.error(err);
+                alerta.classList.remove('d-none');
+                alerta.classList.add('alert-danger');
+                alerta.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i> Erro ao conectar com o servidor.`;
+            }
+            botao.disabled = false;
+            botao.innerHTML = '<i class="bi bi-plus-circle me-2"></i> Criar Sala';
         });
     </script>
 
