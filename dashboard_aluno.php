@@ -1,5 +1,4 @@
 <?php
-// 🛡️ SEGURANÇA: Verifica se é um aluno logado
 session_start();
 if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo'] !== 'aluno') {
     header("Location: login.php");
